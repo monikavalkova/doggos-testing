@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggo.Unit.Tests", "Doggo.Unit.Tests\Doggo.Unit.Tests.csproj", "{B8F0621E-018A-4EDE-B249-5AD5B180A7F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggo.API", "Doggo.API\Doggo.API.csproj", "{2A1E407E-14E6-4BEE-9C82-452C3ACF1B5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8F0621E-018A-4EDE-B249-5AD5B180A7F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8F0621E-018A-4EDE-B249-5AD5B180A7F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8F0621E-018A-4EDE-B249-5AD5B180A7F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8F0621E-018A-4EDE-B249-5AD5B180A7F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A1E407E-14E6-4BEE-9C82-452C3ACF1B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1E407E-14E6-4BEE-9C82-452C3ACF1B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A1E407E-14E6-4BEE-9C82-452C3ACF1B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A1E407E-14E6-4BEE-9C82-452C3ACF1B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
