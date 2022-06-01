@@ -1,5 +1,4 @@
 ﻿using Doggo.API.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Doggo.API.Services
 {
