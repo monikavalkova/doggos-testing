@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Doggo.API.Models;
 using Doggo.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +21,18 @@ namespace Doggo.API.Controllers
         [HttpGet]
         [Route("/breeds")]
         [Produces("application/json")]
-        public IEnumerable<DogDto> GetDogsByBreed()
+        public Task<ActionResult<IEnumerable<DogDto>>> GetDogsByBreed()
         {
             // https://api.thecatapi.com/v1/breeds/search?q=air TODO
             throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        [Route("/ping")]
+        [Produces("application/json")]
+        public async Task<ActionResult<object>> Ping()
+        {
+            return await _service.Ping();
         }
     }
 }

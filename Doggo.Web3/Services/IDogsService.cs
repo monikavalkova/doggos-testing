@@ -1,10 +1,11 @@
-﻿using Doggo.API.Models;
+﻿using System.Threading.Tasks;
+using Doggo.API.Models;
 
 namespace Doggo.API.Services
 {
     public interface IDogsService
     {
-        public DogsResponse GetDogsOfBreed(string breed);
-
+        DogsResponse GetDogsOfBreed(string breed);
+        Task<object> Ping();
     }
 }

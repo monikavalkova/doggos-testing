@@ -1,4 +1,5 @@
-﻿using Doggo.API.Models;
+﻿using System.Threading.Tasks;
+using Doggo.API.Models;
 
 namespace Doggo.API.Services
 {
@@ -7,6 +8,11 @@ namespace Doggo.API.Services
         public DogsResponse GetDogsOfBreed(string breed)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task<object> Ping()
+        {
+            return new {Text = "OK. Good to go."};
         }
     }
 }
