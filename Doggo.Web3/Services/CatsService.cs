@@ -3,9 +3,9 @@ using Doggo.API.Models;
 
 namespace Doggo.API.Services
 {
-    public class DogsService : IDogsService
+    public class CatsService : ICatsService
     {
-        public DogsResponse GetDogsOfBreed(string breed)
+        public CatsResponse GetCatsOfBreed(string breed)
         {
             throw new System.NotImplementedException();
         }

@@ -9,11 +9,11 @@ namespace Doggo.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DogsController : ControllerBase
+    public class AnimaController : ControllerBase
     {
-        private IDogsService _service;
+        private ICatsService _service;
         
-        public DogsController(IDogsService service)
+        public AnimaController(ICatsService service)
         {
             _service = service;
         }
@@ -21,13 +21,14 @@ namespace Doggo.API.Controllers
         [HttpGet]
         [Route("/breeds")]
         [Produces("application/json")]
-        public Task<ActionResult<IEnumerable<DogDto>>> GetDogsByBreed()
+        public Task<ActionResult<IEnumerable<CatDto>>> FindCats(string breed) //e.g., dober
         {
-            // https://api.thecatapi.com/v1/breeds/search?q=air TODO
+            
+            //await _service.GetCatsOfBreed(breed);
             throw new NotImplementedException();
         }
 
-        [HttpGet]
+        [HttpGet("/ping")]
         [Route("/ping")]
         [Produces("application/json")]
         public async Task<ActionResult<object>> Ping()
