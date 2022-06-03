@@ -13,7 +13,7 @@ namespace Doggo.API.Services
 
         public async Task<object> Ping()
         {
-            return new {Text = "OK. Good to go."};
+            return new {Text = "OK. Good to go."}; //TODO assert content in the integr. test
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Doggo.API.Models
 {
-    public class Dog
+    public class DogDto
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }

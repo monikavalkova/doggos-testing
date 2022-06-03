@@ -35,5 +35,11 @@ namespace Doggo.API.Controllers
         {
             return await _service.Ping();
         }
+
+        [HttpPost]
+        public Task<ActionResult<MessageDto>> RegisterForAdoption(AnimalForAdoption animal)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
