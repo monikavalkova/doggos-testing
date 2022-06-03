@@ -5,6 +5,7 @@ namespace Doggo.API.Services
 {
     public class CatsService : ICatsService
     {
+
         public CatsResponse GetCatsOfBreed(string breed)
         {
             throw new System.NotImplementedException();

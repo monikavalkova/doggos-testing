@@ -8,6 +8,6 @@
         public string Description { get; set; }
         public string CfaUrl { get; set; } 
 
-        public 
+        public string ImageUrl { get; set; }
     }
 }
