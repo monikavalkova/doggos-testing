@@ -1,43 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Doggo.API.Models;
 using Doggo.API.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doggo.API.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
+    [Route("api/rescues")] //or rescues? TODO ?
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
     public class AnimaController : ControllerBase
     {
-        private ICatsService _service;
+        private IAFAService _service;
         
-        public AnimaController(ICatsService service)
+        public AnimaController(IAFAService service)
         {
             _service = service;
         }
 
-        [HttpGet]
-        [Route("/breeds")]
-        [Produces("application/json")]
-        public Task<ActionResult<IEnumerable<CatDto>>> FindCats(string breed) //e.g., dober
-        {
-            
-            //await _service.GetCatsOfBreed(breed);
-            throw new NotImplementedException();
-        }
-
         [HttpGet("/ping")]
         [Route("/ping")]
-        [Produces("application/json")]
-        public async Task<ActionResult<object>> Ping()
+        public async Task<ActionResult<string>> Ping()
         {
-            return await _service.Ping();
+            return Ok(_service.Ping());
         }
 
         [HttpPost]
-        public Task<ActionResult<MessageDto>> RegisterForAdoption(AnimalForAdoption animal)
+        public Task<ActionResult<MessageDto>> RegisterForAdoption(AFARequest animal)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Task<ActionResult<AFAResponse>> GetOne(string id)
         {
             throw new NotImplementedException();
         }

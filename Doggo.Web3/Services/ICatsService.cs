@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Doggo.API.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Doggo.API.Services
 {
@@ -24,10 +25,6 @@ namespace Doggo.API.Services
         /// </exception>
         CatsResponse GetCatsOfBreed(string breed);
         
-        /// <summary>
-        /// Method <c>Ping</c> is used for testing purposes.
-        /// </summary>
-        Task<object> Ping();
 
     }
 }

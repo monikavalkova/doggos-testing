@@ -8,25 +8,25 @@ using Xunit;
 
 namespace Doggo.xUnit.Tests;
 
-public class AnimaControllerTests
+public class CatsControllerTests
 {
-    private AnimaController _controller;
     private Mock<ICatsService> _serviceMock;
+    private CatsController _controller;
 
     private static CatDto MOCK_CAT = new CatDto() { Name = "Sphynx" };
     
-    private static CatsResponse MOCK_DOGS_RESPONSE = new CatsResponse()
+    private static CatsResponse MOCK_CATS_RESPONSE = new CatsResponse()
     {
         Count = 5,
         PageSize = 1,
         Cats = new List<CatDto> { MOCK_CAT }
     };
 
-    public AnimaControllerTests()
+    public CatsControllerTests()
     {
         _serviceMock = new Mock<ICatsService>();
-        _serviceMock.Setup(serv => serv.GetCatsOfBreed(It.IsAny<string>())).Returns(MOCK_DOGS_RESPONSE);
-        _controller = new AnimaController(_serviceMock.Object);
+        _serviceMock.Setup(serv => serv.GetCatsOfBreed(It.IsAny<string>())).Returns(MOCK_CATS_RESPONSE);
+        _controller = new CatsController(_serviceMock.Object);
     }
 
     [Fact]
@@ -37,6 +37,4 @@ public class AnimaControllerTests
         //assert
         //result.Should().NotBeNull();
     }
-
-
 }

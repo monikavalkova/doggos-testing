@@ -6,7 +6,7 @@ namespace Doggo.API.Models
     ///<summary>
     ///Used when registering an animal for adoption.
     ///</summary>
-    public class AnimalForAdoption
+    public class AFARequest
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }

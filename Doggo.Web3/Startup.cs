@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using Doggo.API.Data;
 using Doggo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +23,10 @@ namespace Doggo.Web3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IAFAService, AFAService>();
             services.AddScoped<ICatsService, CatsService>();
+            services.AddScoped<IRescuesRepository, RescuesRepository>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
