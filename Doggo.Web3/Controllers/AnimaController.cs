@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Doggo.API.Controllers
 {
-    
+
     [ApiController]
     [Route("api/rescues")] //or rescues? TODO ?
     [Consumes(MediaTypeNames.Application.Json)]
@@ -17,7 +17,7 @@ namespace Doggo.API.Controllers
     public class AnimaController : ControllerBase
     {
         private IAFAService _service;
-        
+
         public AnimaController(IAFAService service)
         {
             _service = service;
@@ -42,7 +42,10 @@ namespace Doggo.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AFAResponse>> GetOne(string id)
         {
-            return Ok(await _service.GetOne(id));
+            if (id == null) return BadRequest();
+            var afa = await _service.GetOne(id);
+            if (afa == null) return NotFound();
+            return Ok(afa);
         }
     }
 }

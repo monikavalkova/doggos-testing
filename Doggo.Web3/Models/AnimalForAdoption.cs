@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Doggo.API.Models
 {
+    public enum Species
+    {
+        CAT, DOG, DUCK
+    }
     public class AFA
     {
         [Key]
@@ -12,5 +16,6 @@ namespace Doggo.API.Models
         public string Story { get; set; }
         public string City { get; set; }
         public string CountryCode { get; set; }
+        public Species Species { get; set; }
     }
 }

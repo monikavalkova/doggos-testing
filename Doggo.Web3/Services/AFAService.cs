@@ -26,7 +26,7 @@ namespace Doggo.API.Services
         public async Task<AFAResponse> GetOne(string id)
         {
             var dbEntity = _repo.Find(id);
-            //if the entity doesn't exist?
+            if(dbEntity == null) return null;
             var dto = _mapper.Map<AFAResponse>(dbEntity);
             return dto;
         }
