@@ -8,9 +8,9 @@ namespace Doggo.API.Models
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
-        
+
         [JsonPropertyName("species")]
-        public Species Species { get; set; }
+        public string Species { get; set; }
         
         [JsonPropertyName("imageUrl")]
         public string ImageUrl { get; set; }

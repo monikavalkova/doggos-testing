@@ -12,6 +12,7 @@ using Doggo.API.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 
 namespace Doggo.Integration
 {
@@ -19,7 +20,7 @@ namespace Doggo.Integration
     {
         private readonly HttpClient _client;
         private const string BASE_URL = "/api/rescues";
-        private const string CATS_URL = BASE_URL + "/cats";
+        private const string FILTER_URL = BASE_URL + "/limit";
         private const string ID_OF_A_RESCUE = "b770d25a-89dc-4eg6-a322-dfa4532354f9";
 
 
@@ -58,13 +59,14 @@ namespace Doggo.Integration
         {
             //act
             var response = await _client.GetAsync(BASE_URL + "/cass-id");
+            
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
            
             var stringifiedResponse = await response.Content.ReadAsStringAsync();
             var resultAfa = JsonConvert.DeserializeObject<AFAResponse>(stringifiedResponse);
             
-            resultAfa.Species.Should().Be(Species.CAT);
+            resultAfa.Species.Should().Be("CAT");
             resultAfa.Name.Should().Be("Cassandra");            
         }
 
@@ -73,6 +75,7 @@ namespace Doggo.Integration
         {
             //act
             var response = await _client.GetAsync(BASE_URL);
+            
             //asert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -82,17 +85,47 @@ namespace Doggo.Integration
             result.Count().Should().Be(5);
         }
 
-        [Fact(Skip = "for now")]
-        public async Task getAllCats_should_return_2_cats()
+        [Fact]
+        public async Task filter_should_return_2_cats()
         {
             //act
-            var httpResponse = await _client.GetAsync(CATS_URL);
-
+            var filter = new Filter(){Species = Species.CAT};
+            var jsonifiedObject = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
+            var httpResponse = await _client.PostAsync(FILTER_URL, jsonifiedObject);
+            //assert
             var contentAsString = await httpResponse.Content.ReadAsStringAsync();
             var contentAsEnumerable = JsonConvert.DeserializeObject<IEnumerable<AFAResponse>>(contentAsString);
 
             contentAsEnumerable.Count().Should().Be(2);
+        }
 
+        [Fact]
+        public async Task filter_should_return_2_dogs()
+        {
+            //act
+            var filter = new Filter(){Species = Species.DOG};
+            var jsonifiedObject = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
+            var httpResponse = await _client.PostAsync(FILTER_URL, jsonifiedObject);
+            //assert
+            var contentAsString = await httpResponse.Content.ReadAsStringAsync();
+            var contentAsEnumerable = JsonConvert.DeserializeObject<IEnumerable<AFAResponse>>(contentAsString);
+
+            contentAsEnumerable.Count().Should().Be(2);
+        }
+
+        [Fact]
+        public async Task filter_should_return_1_duck()
+        {
+            //act
+            var filter = new Filter(){Species = Species.DUCK};
+            var jsonifiedObject = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
+            var httpResponse = await _client.PostAsync(FILTER_URL, jsonifiedObject);
+            //assert
+            var contentAsString = await httpResponse.Content.ReadAsStringAsync();
+            var contentAsEnumerable = JsonConvert.DeserializeObject<IEnumerable<AFAResponse>>(contentAsString);
+
+            contentAsEnumerable.Count().Should().Be(1);
+            contentAsEnumerable.First().Name.Should().Be("Donald");
         }
 
         private T Deserialize<T>(string stringifiedResponse)

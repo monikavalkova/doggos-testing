@@ -18,5 +18,9 @@ namespace Doggo.API.Services
         Task<AFAResponse> GetOne(string id);
 
         Task<IEnumerable<AFAResponse>> GetAll();
+
+        Task<IEnumerable<AFAResponse>> Filter(Filter filter);
+
+
     }
 }

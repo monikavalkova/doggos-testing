@@ -53,5 +53,14 @@ namespace Doggo.API.Controllers
             var allAnimalsForAdoption = await _service.GetAll();
             return Ok(allAnimalsForAdoption);
         }
+
+        [HttpPost("limit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AFAResponse>> Filter([FromBody] Filter filter)
+        {
+            var animalsForAdoption = await _service.Filter(filter);
+            return Ok(animalsForAdoption);
+        }
     }
 }
