@@ -28,11 +28,11 @@ namespace Doggo.API.Data
             return _dbContext.AnimalsForAdoption
                             .Where(a => a.Id == id)
                             .FirstOrDefault();
-        }
+        } 
 
         public IEnumerable<AFA> GetAll()
         {
-            throw new System.NotImplementedException();
+            return _dbContext.AnimalsForAdoption;
         }
 
         public IEnumerable<AFA> GetAllCats()

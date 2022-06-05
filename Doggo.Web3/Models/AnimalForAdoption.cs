@@ -7,6 +7,11 @@ namespace Doggo.API.Models
     {
         CAT, DOG, DUCK
     }
+    public enum Gender
+    {
+        FEMALE, MALE
+    }
+
     public class AFA
     {
         [Key]
@@ -17,5 +22,6 @@ namespace Doggo.API.Models
         public string City { get; set; }
         public string CountryCode { get; set; }
         public Species Species { get; set; }
+        public Gender Gender { get; internal set; }
     }
 }

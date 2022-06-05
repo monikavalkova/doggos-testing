@@ -28,39 +28,43 @@ namespace Doggo.Web3.Data
 
         private void AddAnimalsForAdoption(AppDbContext context)
         {
-            Console.WriteLine("### Adding animals for adoption to the empty database");
+            Console.WriteLine("### Adding animals for adoption to the empty in-memory database");
 
             context.AnimalsForAdoption.AddRange(
               new AFA
               {
-                  Id = "existing-id",
+                  Id = "cass-id",
                   Name = "Cassandra",
-                  Species = Species.CAT
+                  Species = Species.CAT,
+                  Gender = Gender.FEMALE
               },
               new AFA
               {
-                  Id = "2f81a686-7531-11e8-86e5-f0d5bf731f68",
-                  Name = "George",
-                  Species = Species.DOG
-                  
+                  Id = "hecu-id",
+                  Name = "Hecuba",
+                  Species = Species.DOG,
+                  Gender = Gender.FEMALE
               },
               new AFA
               {
-                  Id = "f9ce325d-ed8c-4fad-899b-fc997ed199ad",
+                  Id = "bar-id",
                   Name = "Barack",
-                  Species = Species.CAT
+                  Species = Species.CAT,
+                  Gender = Gender.MALE
               },
               new AFA
               {
-                  Id = "b769d25a-86dc-4ec6-a022-dfa4112354f9",
+                  Id = "don-id",
                   Name = "Donald",
-                  Species = Species.DUCK
+                  Species = Species.DUCK,
+                  Gender = Gender.MALE
               },
               new AFA
               {
-                  Id = "822dcf18-54eb-4394-8884-1c73addf25c7",
+                  Id = "arno-id",
                   Name = "Arnold",
-                  Species = Species.DOG
+                  Species = Species.DOG,
+                  Gender = Gender.MALE
               }
             );
         }

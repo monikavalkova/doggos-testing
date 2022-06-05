@@ -38,14 +38,20 @@ namespace Doggo.API.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AFAResponse>> GetOne(string id)
         {
-            if (id == null) return BadRequest();
             var afa = await _service.GetOne(id);
             if (afa == null) return NotFound();
             return Ok(afa);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<AFAResponse>> GetAll()
+        {
+            var allAnimalsForAdoption = await _service.GetAll();
+            return Ok(allAnimalsForAdoption);
         }
     }
 }

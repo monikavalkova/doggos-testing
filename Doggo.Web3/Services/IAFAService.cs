@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Doggo.API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,5 +16,7 @@ namespace Doggo.API.Services
         string Ping();
 
         Task<AFAResponse> GetOne(string id);
+
+        Task<IEnumerable<AFAResponse>> GetAll();
     }
 }

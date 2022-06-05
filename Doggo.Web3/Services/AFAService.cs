@@ -3,6 +3,8 @@ using Doggo.API.Data;
 using Doggo.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Doggo.API.Services
 {
@@ -21,6 +23,11 @@ namespace Doggo.API.Services
         { 
             //TODO add an in-memory database
             throw new System.NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AFAResponse>> GetAll()
+        {
+            return _repo.GetAll().Select(entity => _mapper.Map<AFAResponse>(entity));
         }
 
         public async Task<AFAResponse> GetOne(string id)
