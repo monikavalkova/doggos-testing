@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Doggo.API.Models;
@@ -60,7 +61,16 @@ namespace Doggo.API.Controllers
         public async Task<ActionResult<AFAResponse>> Filter([FromBody] Filter filter)
         {
             var animalsForAdoption = await _service.Filter(filter);
+            if(animalsForAdoption.Count() == 0) return NotFound();
             return Ok(animalsForAdoption);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> Remove(string id)
+        {
+            await _service.Delete(id);
+            return NoContent();
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Doggo.API.Services
 
         Task<IEnumerable<AFAResponse>> Filter(Filter filter);
 
+        Task Delete(string id);
+
 
     }
 }

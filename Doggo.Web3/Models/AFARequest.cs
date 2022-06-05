@@ -18,5 +18,9 @@ namespace Doggo.API.Models
         public string City { get; set; }
         [JsonPropertyName("country_code")]
         public string CountryCode { get; set; }
+        [JsonPropertyName("gender")]
+        public Gender Gender { get; set; }
+        [JsonPropertyName("species")]
+        public Species Species { get; set; }
     }
 }

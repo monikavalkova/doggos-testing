@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Doggo.API.Models;
 using Doggo.Web3.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doggo.API.Data
 {
@@ -20,10 +21,18 @@ namespace Doggo.API.Data
 
         public void Delete(string id)
         {
-            throw new System.NotImplementedException();
+            var animal = GetOne(id);
+            if(animal == null) return;
+            _dbContext.AnimalsForAdoption.Remove(animal);
+            _dbContext.SaveChanges();
         }
 
-        public AFA Find(string id)
+        public IEnumerable<AFA> Filter(Filter filter)
+        {
+            return GetAll().Where(it => it.Species == filter.Species);
+        }
+
+        public AFA GetOne(string id)
         {
             return _dbContext.AnimalsForAdoption
                             .Where(a => a.Id == id)
@@ -33,21 +42,6 @@ namespace Doggo.API.Data
         public IEnumerable<AFA> GetAll()
         {
             return _dbContext.AnimalsForAdoption;
-        }
-
-        public IEnumerable<AFA> GetAllCats()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IEnumerable<AFA> GetAllDogs()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool SaveChanges()
-        {
-            throw new System.NotImplementedException();
         }
 
         public AFA Update(AFA replacement)

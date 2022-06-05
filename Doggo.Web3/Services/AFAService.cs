@@ -11,18 +11,24 @@ namespace Doggo.API.Services
     public class AFAService : IAFAService
     {
         private IRescuesRepository _repo;
-        private Mapper _mapper;
+        private IMapper _mapper;
         public AFAService(IRescuesRepository repo)
         {
             _repo = repo;
-            var mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateMap<AFA, AFAResponse>());
-            _mapper = new Mapper(mapperConfiguration);
+            _mapper = new MapperConfiguration(cfg => cfg.CreateMap<AFA, AFAResponse>()).CreateMapper();
         }
 
         public AFAResponse Add(AFARequest animal)
         {
-            //TODO add an in-memory database
-            throw new System.NotImplementedException();
+            //TODO refactor. Use AutoMapper
+            var savedEntity = _repo.Create(new AFA(){Name = animal.Name, Story = animal.Story, City = animal.City, 
+                                                    Species = animal.Species, Gender = animal.Gender});
+            return _mapper.Map<AFAResponse>(savedEntity);
+        }
+
+        public async Task Delete(string id)
+        {
+            _repo.Delete(id);
         }
 
         public async Task<IEnumerable<AFAResponse>> GetAll()
@@ -32,14 +38,13 @@ namespace Doggo.API.Services
 
         public async Task<IEnumerable<AFAResponse>> Filter(Filter filter)
         {
-            return _repo.GetAll()
-                        .Where(it => it.Species == filter.Species)
+            return _repo.Filter(filter)
                         .Select(entity => _mapper.Map<AFAResponse>(entity));
         }
 
         public async Task<AFAResponse> GetOne(string id)
         {
-            var dbEntity = _repo.Find(id);
+            var dbEntity = _repo.GetOne(id);
             if (dbEntity == null) return null;
             var dto = _mapper.Map<AFAResponse>(dbEntity);
             return dto;

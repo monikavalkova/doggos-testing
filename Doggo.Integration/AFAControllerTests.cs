@@ -128,6 +128,38 @@ namespace Doggo.Integration
             contentAsEnumerable.First().Name.Should().Be("Donald");
         }
 
+        [Fact]
+        public async Task filter_should_return_404_when_the_bug_dies()
+        {
+            //act
+            var deleteResponse = await _client.DeleteAsync(BASE_URL + "/bug-id");
+
+            var filter = new Filter(){Species = Species.BUG};
+            var jsonRequestBody = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
+            var postResponse = await _client.PostAsync(FILTER_URL, jsonRequestBody);
+            //assert
+            postResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+         [Fact(Skip = "until Post endpoint is ready")]
+        public async Task delete_animal_should_delete_indeed()
+        {
+            ////arrange
+            //var newBug = new AFARequest(){ Name = "Poco", Species = Species.BUG };
+            //var jsonRequestBody = new StringContent(JsonConvert.SerializeObject(newBug), Encoding.UTF8, MediaTypeNames.Application.Json);
+            //var postResponse = await _client.PostAsync(BASE_URL, jsonRequestBody);
+
+            //act
+            var responseBeforeDeletion = await _client.GetAsync(BASE_URL + "");
+            await _client.DeleteAsync(BASE_URL + "");
+            var responseAfterDeletion = await _client.GetAsync(BASE_URL + "");
+            
+            //assert
+            responseBeforeDeletion.StatusCode.Should().Be(HttpStatusCode.OK);
+            responseAfterDeletion.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
         private T Deserialize<T>(string stringifiedResponse)
         {
             return JsonConvert.DeserializeObject<T>(stringifiedResponse);

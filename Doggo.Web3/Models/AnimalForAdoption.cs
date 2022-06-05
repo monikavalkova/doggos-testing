@@ -5,7 +5,7 @@ namespace Doggo.API.Models
 {
     public enum Species
     {
-        CAT, DOG, DUCK
+        CAT, DOG, DUCK, BUG
     }
     public enum Gender
     {

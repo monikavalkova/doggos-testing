@@ -65,6 +65,12 @@ namespace Doggo.Web3.Data
                   Name = "Arnold",
                   Species = Species.DOG,
                   Gender = Gender.MALE
+              },
+              new AFA
+              {
+                  Id = "bug-id",
+                  Name = "Nancy",
+                  Species = Species.BUG
               }
             );
         }
