@@ -43,12 +43,7 @@ namespace Doggo.Integration
         [Fact(Skip = "for now")]
         public async Task getOne_with_wrong_url_returns_404()
         {
-            //todo
-            
+            throw new NotImplementedException();
         }
-
-
-
-
     }
 }

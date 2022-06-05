@@ -25,7 +25,7 @@ namespace Doggo.API.Controllers
 
         [HttpGet("/ping")]
         [Route("/ping")]
-        public async Task<ActionResult<string>> Ping()
+        public ActionResult<string> Ping()
         {
             return Ok(_service.Ping());
         }
@@ -40,9 +40,9 @@ namespace Doggo.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public Task<ActionResult<AFAResponse>> GetOne(string id)
+        public async Task<ActionResult<AFAResponse>> GetOne(string id)
         {
-            throw new NotImplementedException();
+            return Ok(await _service.GetOne(id));
         }
     }
 }

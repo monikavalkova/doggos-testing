@@ -1,22 +1,16 @@
-using System.Text.Json.Serialization;
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Doggo.API.Models
 {
-    //TODO validation 
-    ///<summary>
-    ///Used when registering an animal for adoption.
-    ///</summary>
-    public class AFARequest
+    public class AFA
     {
-        [JsonPropertyName("name")]
+        [Key]
+        public string Id { get; set; }
         public string Name { get; set; }
-        [JsonPropertyName("age")]
         public string Age { get; set; }
-        [JsonPropertyName("story")]
         public string Story { get; set; }
-        [JsonPropertyName("city")]
         public string City { get; set; }
-        [JsonPropertyName("country_code")]
         public string CountryCode { get; set; }
     }
 }

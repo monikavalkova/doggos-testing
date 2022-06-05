@@ -13,5 +13,7 @@ namespace Doggo.API.Services
         /// Method <c>Ping</c> is used for testing purposes.
         /// </summary>
         string Ping();
+
+        Task<AFAResponse> GetOne(string id);
     }
 }

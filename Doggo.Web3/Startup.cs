@@ -1,8 +1,10 @@
 
 using Doggo.API.Data;
 using Doggo.API.Services;
+using Doggo.Web3.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,9 +25,13 @@ namespace Doggo.Web3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+
             services.AddScoped<IAFAService, AFAService>();
             services.AddScoped<ICatsService, CatsService>();
             services.AddScoped<IRescuesRepository, RescuesRepository>();
+            
+            services.AddSingleton<SeedDatabase>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -42,6 +48,9 @@ namespace Doggo.Web3
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Doggo.Web3 v1"));
+
+                var dbSeeder = app.ApplicationServices.GetService<SeedDatabase>();
+                dbSeeder.PrepPopulation(app);
             }
 
             app.UseHttpsRedirection();
