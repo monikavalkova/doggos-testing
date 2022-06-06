@@ -16,13 +16,11 @@ using System.Text;
 
 namespace Doggo.Integration
 {
-    public class AFAControllerTests : IClassFixture<WebApplicationFactory<Startup>>
+    public class AFAControllerTests : IClassFixture<WebApplicationFactory<Startup>> //TODO refactor
     {
         private readonly HttpClient _client;
         private const string BASE_URL = "/api/rescues";
         private const string FILTER_URL = BASE_URL + "/limit";
-        private const string ID_OF_A_RESCUE = "b770d25a-89dc-4eg6-a322-dfa4532354f9";
-
 
         public AFAControllerTests(WebApplicationFactory<Startup> fixture)
         =>  _client = fixture.CreateClient(); 
