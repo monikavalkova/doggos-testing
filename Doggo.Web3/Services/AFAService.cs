@@ -20,8 +20,7 @@ namespace Doggo.API.Services
 
         public AFAResponse Add(AFARequest animal)
         {
-            var savedEntity = _repo.Create(new AFA(){Name = animal.Name, Story = animal.Story, City = animal.City, 
-                                                    Species = animal.Species, Gender = animal.Gender});
+            var savedEntity = _repo.Create(MapToEntity(animal)); //TODO use auto-mapper
             return _mapper.Map<AFAResponse>(savedEntity);
         }
 
@@ -68,9 +67,20 @@ namespace Doggo.API.Services
             return _mapper.Map<AFAResponse>(newEntity);
         }
 
-        public Task<AFAResponse> PartialUpdate(string id, AFARequest animal)
+        public async Task<AFAResponse> PartialUpdate(string id, AFAPatchRequest animal)
         {
-            throw new System.NotImplementedException();
+            var dbEntity = _repo.GetOne(id);
+            if(dbEntity == null) return null;
+            
+            if(animal.Name != null) dbEntity.Name = animal.Name;
+            if(animal.Age != null) dbEntity.Age = animal.Age;
+            if(animal.City != null) dbEntity.City = animal.City;
+            if(animal.ContactNumber != null) dbEntity.ContactNumber = animal.ContactNumber;
+            if(animal.Country != null) dbEntity.Country = animal.Country;
+            if(animal.Remarks != null) dbEntity.Remarks = animal.Remarks;
+            if(animal.Story != null) dbEntity.Story = animal.Story;
+
+            return _mapper.Map<AFAResponse>(_repo.UpdatePartial(dbEntity)); 
         }
 
         private AFA MapToEntity(AFARequest dto)

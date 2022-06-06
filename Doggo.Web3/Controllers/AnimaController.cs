@@ -85,5 +85,15 @@ namespace Doggo.API.Controllers
             await _service.Delete(id);
             return NoContent();
         }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdatePartially(string id, AFAPatchRequest request)
+        {
+            var updatedInfo = await _service.PartialUpdate(id, request);
+            if(updatedInfo == null) return NotFound();
+            return Ok(updatedInfo);
+        }
     }
 }

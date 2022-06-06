@@ -22,7 +22,7 @@ namespace Doggo.API.Data
 
             _dbContext.AnimalsForAdoption.Add(rescue);
             _dbContext.SaveChanges();
-            
+
             return rescue;
         }
 
@@ -51,9 +51,11 @@ namespace Doggo.API.Data
             return _dbContext.AnimalsForAdoption;
         }
 
-        public AFA Update(AFA replacement)
+        public AFA UpdatePartial(AFA dbEntity)
         {
-            throw new System.NotImplementedException();
+            _dbContext.Entry<AFA>(dbEntity).State = EntityState.Modified;
+            _dbContext.SaveChanges();
+            return dbEntity;
         }
     }
 }

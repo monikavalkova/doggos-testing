@@ -295,6 +295,39 @@ namespace Doggo.Integration
             afa.Remarks.Should().Be(remarks);
         }
 
+        [Fact]
+        public async Task patch_must_return_404_when_id_does_not_exist()
+        {
+            //arrange
+            var requestBody = new AFAPatchRequest(){Story = "Roki found a loving home.", City = "Stockholm", Country = "Sweden"};
+            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
+            //act 
+            var response = await _client.PatchAsync(BASE_URL + "/" + "non-existent-id", requestBodyJson);
+            //assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task patch_must_partially_update()
+        {
+            //arrange
+            var requestBody = new AFAPatchRequest(){Story = "Roki found a loving home.", City = "Stockholm", Country = "Sweden"};
+            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
+            //act 
+            var patchResponse = await _client.PatchAsync(BASE_URL + "/" + "roki-id", requestBodyJson);
+            //assert
+            patchResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            
+            var animal = JsonConvert.DeserializeObject<AFAResponse>(await patchResponse.Content.ReadAsStringAsync());
+
+            animal.Name.Should().Be("Roki");
+            animal.Species.Should().Be("DOG");
+            animal.Gender.Should().Be("FEMALE");
+            animal.Story.Should().Be("Roki found a loving home.");
+            animal.City.Should().Be("Stockholm");
+            animal.Country.Should().Be("Sweden");
+        }
+
         private T Deserialize<T>(string stringifiedResponse)
         => JsonConvert.DeserializeObject<T>(stringifiedResponse);
 

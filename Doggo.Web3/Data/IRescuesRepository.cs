@@ -10,6 +10,6 @@ namespace Doggo.API.Data
         IEnumerable<AFA> Filter(Filter filter);
         AFA Create(AFA newOne);
         void Delete(string id);
-        AFA Update(AFA replacement);
+        AFA UpdatePartial(AFA dbEntity);
     }
 }

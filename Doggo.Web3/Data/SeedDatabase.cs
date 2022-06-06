@@ -40,8 +40,10 @@ namespace Doggo.Web3.Data
               },
               new AFA
               {
-                  Id = "hecu-id",
-                  Name = "Hecuba",
+                  Id = "roki-id",
+                  Name = "Roki",
+                  City = "Varna",
+                  Country = "Bulgaria",
                   Species = Species.DOG,
                   Gender = Gender.FEMALE
               },
