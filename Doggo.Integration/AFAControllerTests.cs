@@ -142,18 +142,20 @@ namespace Doggo.Integration
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
-        [Fact(Skip = "until Post endpoint is ready")]
+        [Fact]
         public async Task delete_animal_should_delete_indeed()
         {
-            ////arrange
-            //var newBug = new AFARequest(){ Name = "Poco", Species = Species.BUG };
-            //var jsonRequestBody = new StringContent(JsonConvert.SerializeObject(newBug), Encoding.UTF8, MediaTypeNames.Application.Json);
-            //var postResponse = await _client.PostAsync(BASE_URL, jsonRequestBody);
+            //arrange
+            var newBug = new AFARequest(){Name = "Jorko", Age = "1", Story = "rescued from a spider web", 
+                            ContactNumber = "c", City = "c", Country = "c", Species = Species.BUG };
 
+            var jsonRequestBody = new StringContent(JsonConvert.SerializeObject(newBug), Encoding.UTF8, MediaTypeNames.Application.Json);
+            var postResponse = await _client.PostAsync(BASE_URL, jsonRequestBody);
+            var jorkoUri = postResponse.Headers.Location.PathAndQuery;
             //act
-            var responseBeforeDeletion = await _client.GetAsync(BASE_URL + "");
-            await _client.DeleteAsync(BASE_URL + "");
-            var responseAfterDeletion = await _client.GetAsync(BASE_URL + "");
+            var responseBeforeDeletion = await _client.GetAsync(jorkoUri);
+            await _client.DeleteAsync(jorkoUri);
+            var responseAfterDeletion = await _client.GetAsync(jorkoUri);
             
             //assert
             responseBeforeDeletion.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -162,9 +164,9 @@ namespace Doggo.Integration
         
         [Theory]
         [InlineData("name", "age", "story", null, "city", "country", Gender.FEMALE, Species.DOG)]
-        [InlineData("name", "age", "story", "contactNum", null, "country", Gender.FEMALE, Species.DOG)]
-        [InlineData("name", "age", "story", "contactNum", "city", null, Gender.FEMALE, Species.DOG)]
-        [InlineData("name", "age", "story", "contactNum", "city", "country", Gender.FEMALE, null)]
+        [InlineData("name", "age", "story", "phone", null, "country", Gender.FEMALE, Species.DOG)]
+        [InlineData("name", "age", "story", "phone", "city", null, Gender.FEMALE, Species.DOG)]
+        [InlineData("name", "age", "story", "phone", "city", "country", Gender.FEMALE, null)]
         public async Task post_must_validate(string name, string age, string story, 
                                             string contactNumber, string city, string country, 
                                             Gender gender, Species species)
