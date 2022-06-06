@@ -68,6 +68,16 @@ namespace Doggo.API.Controllers
             return Ok(animalsForAdoption);
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AFAResponse>> Update(string id, [FromBody] AFARequest animal)
+        {
+            var animalForAdoption = await _service.Replace(id, animal);
+            if(animalForAdoption == null) return NotFound();
+            return Ok(animalForAdoption);
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Remove(string id)

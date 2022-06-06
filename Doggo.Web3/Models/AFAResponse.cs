@@ -17,5 +17,25 @@ namespace Doggo.API.Models
         
         [JsonPropertyName("imageUrl")]
         public string ImageUrl { get; set; }
+
+        public string ContactNumber { get; set; }
+
+        [JsonPropertyName("city")]
+        public string City { get; set; }
+
+        [JsonPropertyName("country")]
+        public string Country { get; set; }
+
+        [JsonPropertyName("gender")]
+        public string Gender { get; set; }
+
+        [JsonPropertyName("remarks")]
+        public string Remarks { get; set; }
+
+        [JsonPropertyName("age")]
+        public string Age { get; set; }
+
+        [JsonPropertyName("story")]
+        public string Story { get; set; }
     }
 }

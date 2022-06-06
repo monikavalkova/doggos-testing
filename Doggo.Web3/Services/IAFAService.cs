@@ -23,6 +23,8 @@ namespace Doggo.API.Services
 
         Task Delete(string id);
 
+        Task<AFAResponse> Replace(string id, AFARequest animal);
 
+        Task<AFAResponse> PartialUpdate(string id, AFARequest animal);
     }
 }

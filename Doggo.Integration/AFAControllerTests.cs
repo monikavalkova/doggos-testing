@@ -37,7 +37,6 @@ namespace Doggo.Integration
             var result = await _client.GetAsync(url);
             //assert
             result.StatusCode.Should().Be(OK);
-            //result.Content.Headers.ContentType.MediaType.Should().Be(MediaTypeNames.Application.Json);
 
             var jsonResponse = await result.Content.ReadAsStringAsync();
             var stringResponse = JsonConvert.DeserializeObject<string>(jsonResponse);
@@ -167,7 +166,7 @@ namespace Doggo.Integration
         [InlineData("name", "age", "story", "phone", null, "country", Gender.FEMALE, Species.DOG)]
         [InlineData("name", "age", "story", "phone", "city", null, Gender.FEMALE, Species.DOG)]
         [InlineData("name", "age", "story", "phone", "city", "country", Gender.FEMALE, null)]
-        public async Task post_must_validate(string name, string age, string story, 
+        public async Task post_must_accept_only_valid_request_body(string name, string age, string story, 
                                             string contactNumber, string city, string country, 
                                             Gender gender, Species species)
         {
@@ -221,14 +220,88 @@ namespace Doggo.Integration
             _client.DeleteAsync(BASE_URL + "/" + animalForAdoption.Id);
         }
 
-        private T Deserialize<T>(string stringifiedResponse)
+        [Fact]
+        public async Task put_must_return_404_when_id_does_not_exist()
         {
-            return JsonConvert.DeserializeObject<T>(stringifiedResponse);
+            //arrange
+            var requestBody = new AFARequest(){Name = "Maja", Age = "3", Story = "found on the street", 
+                            ContactNumber = "+359884939914", City = "Sofia", Country = "Bulgaria", 
+                            Gender = Gender.FEMALE, Species = Species.CAT, Remarks = "Excellent temperament. Will make a good pet." };
+            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
+            //act 
+            var response = await _client.PutAsync(BASE_URL + "/" + "non-existent-id", requestBodyJson);
+            //assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        private async Task<string> StringifyContent(HttpResponseMessage response)
+        [Theory]
+        [InlineData("name", "age", "story", null, "city", "country", Gender.FEMALE, Species.DOG)]
+        [InlineData("name", "age", "story", "phone", null, "country", Gender.FEMALE, Species.DOG)]
+        [InlineData("name", "age", "story", "phone", "city", null, Gender.FEMALE, Species.DOG)]
+        [InlineData("name", "age", "story", "phone", "city", "country", Gender.FEMALE, null)]
+        public async Task put_must_accept_only_valid_request_body(string name, string age, string story, 
+                                            string contactNumber, string city, string country, 
+                                            Gender gender, Species species)
         {
-            return await response.Content.ReadAsStringAsync();
+            //arrange
+            var requestBody = new AFARequest(){Name = name, Age = age, Story = story, 
+                            ContactNumber = contactNumber, City = city, Country = country, 
+                            Gender = gender, Species = species };
+
+            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
+            //act
+            var httpResponse = await _client.PutAsync(BASE_URL + "/" + "cass-id", requestBodyJson);
+            //assert
+            var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            httpResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            jsonResponse.Should().Contain("must not be null.");
         }
+
+        [Fact]
+        public async Task put_must_replace_the_whole_object()
+        {
+            //arrange
+            var getResponse = _client.GetAsync(BASE_URL + "/" + "cass-id");
+
+            var name = "Maja";
+            var age = ">3";
+            var story = "found on the street";
+            var contactNumber = "+359884939914";
+            var city = "Sofia";
+            var country = "Bulgaria";
+            var gender = Gender.FEMALE;
+            var species = Species.CAT;
+            var remarks = "Excellent temperament. Will make a good pet.";
+            
+            var requestBody = new AFARequest(){Name = name, Age = age, Story = story, 
+                            ContactNumber = contactNumber, City = city, Country = country, 
+                            Gender = gender, Species = species, Remarks = remarks };
+            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
+            
+            //act 
+            var response = await _client.PutAsync(BASE_URL + "/" + "cass-id", requestBodyJson);
+            
+            //assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            
+            var afa = JsonConvert.DeserializeObject<AFAResponse>(await response.Content.ReadAsStringAsync());
+            
+            afa.Name.Should().Be(name);
+            afa.Age.Should().Be(age);
+            afa.Story.Should().Be(story);
+            afa.ContactNumber.Should().Be(contactNumber);
+            afa.City.Should().Be(city);
+            afa.Country.Should().Be(country);
+            afa.Gender.Should().Be(gender.ToString());
+            afa.Species.Should().Be(species.ToString());
+            afa.Remarks.Should().Be(remarks);
+        }
+
+        private T Deserialize<T>(string stringifiedResponse)
+        => JsonConvert.DeserializeObject<T>(stringifiedResponse);
+
+        private async Task<string> StringifyContent(HttpResponseMessage response)
+        => await response.Content.ReadAsStringAsync();
+        
     }
 }

@@ -53,5 +53,40 @@ namespace Doggo.API.Services
         {
             return "OK, good to go.";
         }
+
+        public async Task<AFAResponse> Replace(string id, AFARequest dto)
+        {
+            var dbEntity = _repo.GetOne(id);
+            if(dbEntity == null) return null;
+
+            var newEntity = MapToEntity(dto); //TODO use auto-mapper!!
+            newEntity.Id = dbEntity.Id;
+            
+            _repo.Delete(id);
+            _repo.Create(newEntity);
+
+            return _mapper.Map<AFAResponse>(newEntity);
+        }
+
+        public Task<AFAResponse> PartialUpdate(string id, AFARequest animal)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private AFA MapToEntity(AFARequest dto)
+        {
+            return new AFA()
+            {
+                Name = dto.Name,
+                Age = dto.Age,
+                Story = dto.Story,
+                ContactNumber = dto.ContactNumber,
+                City = dto.City,
+                Country = dto.Country,
+                Gender = dto.Gender,
+                Species = dto.Species,
+                Remarks = dto.Remarks
+            };
+        }
     }
 }

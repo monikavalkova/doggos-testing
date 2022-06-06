@@ -20,8 +20,10 @@ namespace Doggo.API.Models
         public string Age { get; set; }
         public string Story { get; set; }
         public string City { get; set; }
-        public string CountryCode { get; set; }
         public Species Species { get; set; }
-        public Gender Gender { get; internal set; }
+        public Gender Gender { get; set; }
+        public string ContactNumber { get; set; }
+        public string Country { get; set; }
+        public string Remarks { get; set; }
     }
 }
