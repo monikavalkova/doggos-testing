@@ -3,6 +3,7 @@ using Doggo.API.Models;
 using Doggo.Web3.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Doggo.API.Data
 {
@@ -14,9 +15,15 @@ namespace Doggo.API.Data
             _dbContext = dbContext;
         }
 
-        public AFA Create(AFA newOne)
+        public AFA Create(AFA rescue)
         {
-            throw new System.NotImplementedException();
+            var id = Guid.NewGuid().ToString().Replace("-", "");
+            rescue.Id = id;
+
+            _dbContext.AnimalsForAdoption.Add(rescue);
+            _dbContext.SaveChanges();
+            
+            return rescue;
         }
 
         public void Delete(string id)

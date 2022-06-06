@@ -20,7 +20,6 @@ namespace Doggo.API.Services
 
         public AFAResponse Add(AFARequest animal)
         {
-            //TODO refactor. Use AutoMapper
             var savedEntity = _repo.Create(new AFA(){Name = animal.Name, Story = animal.Story, City = animal.City, 
                                                     Species = animal.Species, Gender = animal.Gender});
             return _mapper.Map<AFAResponse>(savedEntity);

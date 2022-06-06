@@ -6,6 +6,9 @@ namespace Doggo.API.Models
     //i.e., Animal For Adoption
     public class AFAResponse
     {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
