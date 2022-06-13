@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using Doggo.UI.Models;
 
 namespace Doggo.UI.Models
 {
     public class AnimalsResponse
     {
-        public IEnumerable<Animal> Animals { get; set; }
+        [JsonPropertyName("animalsForAdoption")]
+        public IEnumerable<AnimalResp> Animals { get; set; }
     }
 }

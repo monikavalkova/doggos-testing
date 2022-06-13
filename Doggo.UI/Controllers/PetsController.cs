@@ -10,9 +10,10 @@ public class PetsController : Controller
     private readonly IDoggoWebAPIClient _client;
     public PetsController(IDoggoWebAPIClient client) => _client = client;
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        //TODO add tests
+        //TODO catch unexpected exceptions + add test
+        var petsForAdoption = await _client.GetPetsForAdoption();
         return View();
     }
 }

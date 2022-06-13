@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Text.Json;
 using Doggo.UI.Models;
 
 namespace Doggo.UI.Services
@@ -7,12 +8,19 @@ namespace Doggo.UI.Services
     public class DoggoWebAPIClient : IDoggoWebAPIClient
     {
         private static readonly string WEB_API_ADDRESS_IN_CONFIGURATION = "WebApiDoggo";
-       
-        public Task<AnimalsResponse> GetPetsForAdoption()
+
+        public async Task<AnimalsResponse> GetPetsForAdoption()
         {
             var client = getHttpClient();
-            var url = "https://localhost:5001/api/rescues";  //TODO make sure it works! THEN move to appsettings.json
-            return null;                                     //Add dependency towards the configurations!!
+            var url = "https://localhost:5001/api/rescues";  //TODO make sure it works! THEN move to appsettings.json //Add dependency towards the configurations!! https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#jcp
+            var getAnimalsTask = client.GetStreamAsync(url);
+            var apiResponse = await getAnimalsTask;
+            Console.WriteLine("__________________________________________________");
+            var obj = await JsonSerializer.DeserializeAsync<Object>(apiResponse);
+            Console.WriteLine(obj);
+            Console.WriteLine("__________________________________________________");
+            
+            return await JsonSerializer.DeserializeAsync<AnimalsResponse>(apiResponse); //FIXME...
         }
 
         //private readonly IConfiguration _configuration;
@@ -22,7 +30,7 @@ namespace Doggo.UI.Services
 
         //private string GetBaseUrl()
         // => _configuration[WEB_API_ADDRESS_IN_CONFIGURATION];
-        
+
 
         private HttpClient getHttpClient()
         {
