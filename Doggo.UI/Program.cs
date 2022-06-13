@@ -1,7 +1,9 @@
-var builder = WebApplication.CreateBuilder(args);
+using Doggo.UI.Services;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+//dependency injection
+builder.Services.AddScoped<IDoggoWebAPIClient, DoggoWebAPIClient>();
 
 var app = builder.Build();
 

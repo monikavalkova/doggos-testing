@@ -52,9 +52,10 @@ namespace Doggo.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<AFAResponse>> GetAll()
+        public async Task<ActionResult<IEnumerable<AFAResponse>>> GetAll()
         {
             var allAnimalsForAdoption = await _service.GetAll();
+            
             return Ok(allAnimalsForAdoption);
         }
 

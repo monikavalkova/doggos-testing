@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Doggo.API.Data;
 using Doggo.API.Models;
-using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +70,7 @@ namespace Doggo.API.Services
         {
             var dbEntity = _repo.GetOne(id);
             if(dbEntity == null) return null;
-            
+            //TODO make this smarter.
             if(animal.Name != null) dbEntity.Name = animal.Name;
             if(animal.Age != null) dbEntity.Age = animal.Age;
             if(animal.City != null) dbEntity.City = animal.City;
