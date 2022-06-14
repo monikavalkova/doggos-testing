@@ -65,7 +65,7 @@ namespace Doggo.Integration
             var resultAfa = JsonConvert.DeserializeObject<AFAResponse>(stringifiedResponse);
             
             resultAfa.Species.Should().Be("CAT");
-            resultAfa.Name.Should().Be("Cassandra");            
+            resultAfa.Name.Should().Be("Cassi");            
         }
 
         [Fact]
@@ -216,7 +216,7 @@ namespace Doggo.Integration
             response.Headers.Location.PathAndQuery.ToLowerInvariant().Should().Contain(BASE_URL.ToLowerInvariant());
             response.Headers.Location.PathAndQuery.Should().Contain(animalForAdoption.Id);
             //revert db changes
-            _client.DeleteAsync(BASE_URL + "/" + animalForAdoption.Id);
+            await _client.DeleteAsync(BASE_URL + "/" + animalForAdoption.Id);
         }
 
         [Fact]

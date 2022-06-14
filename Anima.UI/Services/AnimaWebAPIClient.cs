@@ -15,7 +15,7 @@ namespace Anima.UI.Services
         public async Task<AnimalsResponse> GetPetsForAdoption()
         {
             var client = getHttpClient();
-            var url = "https://localhost:5001/api/animals";  //TODO make sure it works! THEN move to appsettings.json //Add dependency towards the configurations!! https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#jcp
+            var url = "https://localhost:5001/api/animals";  //TODO move to appsettings.json //Add dependency of the configurations!! https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#jcp
             var animalResp = await client.GetFromJsonAsync<AnimalsResponse>(url);
             return animalResp;
         }

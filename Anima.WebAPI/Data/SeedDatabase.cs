@@ -34,7 +34,7 @@ namespace Anima.WebAPI.Data
               new AFA
               {
                   Id = "cass-id",
-                  Name = "Cassandra",
+                  Name = "Cassi",
                   Species = Species.CAT,
                   Gender = Gender.FEMALE
               },
