@@ -4,15 +4,16 @@ using FluentAssertions;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
-using Doggo.Web3;
+
 using static System.Net.HttpStatusCode;
 using Newtonsoft.Json;
 using System.Net.Mime;
-using Doggo.API.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Anima.WebAPI;
+using Anima.WebAPI.Models;
 
 namespace Doggo.Integration
 {

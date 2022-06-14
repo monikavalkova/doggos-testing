@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # 
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggo.xUnit.Tests", "Doggo.xUnit.Tests\Doggo.xUnit.Tests.csproj", "{CF9961E3-27BB-48E9-A9ED-E1AC0AF69A4A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggo.Web3", "Doggo.Web3\Doggo.Web3.csproj", "{5FECBEFD-20E8-4A3F-B686-4514B4B3E702}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggo.Integration", "Doggo.Integration\Doggo.Integration.csproj", "{2D52A568-0C35-480D-9E24-C0E2F1595BFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggo.UI.Tests", "Doggo.UI.Tests\Doggo.UI.Tests.csproj", "{2C5C08EA-B074-4495-9500-050AD586131B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anima.UI", "Anima.UI\Anima.UI.csproj", "{DB5651DD-D54C-490F-913D-74CD1CC7C7E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggo.UI", "Doggo.UI\Doggo.UI.csproj", "{98BEBDB1-873E-4047-9338-30A4BA9B9BE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anima.UI.Tests", "Anima.UI.Tests\Anima.UI.Tests.csproj", "{A77830BB-E1C4-424B-9209-C67AE45CAF2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anima.API.Tests", "Anima.API.Tests\Anima.API.Tests.csproj", "{287F9DAA-43F5-4694-8644-2E78C50F9691}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anima.WebAPI", "Anima.WebAPI\Anima.WebAPI.csproj", "{449C52DA-C6FA-4F55-BE56-027833A6EA28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,5 +41,25 @@ Global
 		{98BEBDB1-873E-4047-9338-30A4BA9B9BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98BEBDB1-873E-4047-9338-30A4BA9B9BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98BEBDB1-873E-4047-9338-30A4BA9B9BE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F78E9643-4BE8-4F86-AA6D-634288A81B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F78E9643-4BE8-4F86-AA6D-634288A81B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F78E9643-4BE8-4F86-AA6D-634288A81B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F78E9643-4BE8-4F86-AA6D-634288A81B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB5651DD-D54C-490F-913D-74CD1CC7C7E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB5651DD-D54C-490F-913D-74CD1CC7C7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB5651DD-D54C-490F-913D-74CD1CC7C7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB5651DD-D54C-490F-913D-74CD1CC7C7E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A77830BB-E1C4-424B-9209-C67AE45CAF2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77830BB-E1C4-424B-9209-C67AE45CAF2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A77830BB-E1C4-424B-9209-C67AE45CAF2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77830BB-E1C4-424B-9209-C67AE45CAF2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{287F9DAA-43F5-4694-8644-2E78C50F9691}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{287F9DAA-43F5-4694-8644-2E78C50F9691}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{287F9DAA-43F5-4694-8644-2E78C50F9691}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{287F9DAA-43F5-4694-8644-2E78C50F9691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{449C52DA-C6FA-4F55-BE56-027833A6EA28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{449C52DA-C6FA-4F55-BE56-027833A6EA28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{449C52DA-C6FA-4F55-BE56-027833A6EA28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{449C52DA-C6FA-4F55-BE56-027833A6EA28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
