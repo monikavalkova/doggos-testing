@@ -44,5 +44,20 @@ namespace Anima.UI.Tests
             var mainHeader = WebDriver.FindElement(By.Id("mainHeader"));
             Assert.Equal("All Pets", mainHeader.Text);            
         }
+
+        [Fact]
+        public void should_show_six_pets_and_images()
+        {
+            //Act
+            WebDriver.Navigate().GoToUrl($"http://localhost:6001/pets");
+            
+            var petCardsSection = WebDriver.FindElement(By.ClassName("pet-cards"));
+            var petCardsImages = WebDriver.FindElements(By.CssSelector("img"));
+            var petCards = WebDriver.FindElements(By.ClassName("pet-card"));
+            //Assert
+            Assert.NotNull(petCardsSection);
+            Assert.Equal(6, petCards.Count);
+            Assert.Equal(6, petCardsImages.Count);
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace Doggo.Integration
     public class AFAControllerTests : IClassFixture<WebApplicationFactory<Startup>> //TODO refactor
     {
         private readonly HttpClient _client;
-        private const string BASE_URL = "/api/rescues";
+        private const string BASE_URL = "/api/animals";
         private const string FILTER_URL = BASE_URL + "/limit";
 
         public AFAControllerTests(WebApplicationFactory<Startup> fixture)

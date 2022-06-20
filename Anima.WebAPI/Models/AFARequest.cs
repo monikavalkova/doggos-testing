@@ -43,5 +43,7 @@ namespace Anima.WebAPI.Models
 
         [JsonPropertyName("remarks")]
         public string Remarks { get; set; }
+        [JsonPropertyName("imageUrl")]
+        public string ImageUrl { get; set; }
     }
 }

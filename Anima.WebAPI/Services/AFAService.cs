@@ -94,7 +94,8 @@ namespace Anima.WebAPI.Services
                 Country = dto.Country,
                 Gender = dto.Gender,
                 Species = dto.Species,
-                Remarks = dto.Remarks
+                Remarks = dto.Remarks,
+                ImageUrl = dto.ImageUrl
             };
         }
     }

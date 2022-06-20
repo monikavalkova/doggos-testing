@@ -1,7 +1,26 @@
+@model Anima.UI.Models.AnimalsResponse
 @{
-    ViewData["Title"] = "Pets Page";
+    ViewData["Title"] = "All Pets Page";
+}
+@if (Model.Animals.Count() == 0)
+{
+    <h1>Currently there are no pets for adoption.</h1>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4" id="mainHeader">All Pets</h1>
+    </div>
+    <section class="pet-cards">
+        @foreach (var pet in Model.Animals)
+        {
+             <article class="pet-card">
+                <h3>@pet.Name</h3>
+                <img style="max-width: 300px" src="@pet.ImageUrl">
+            </article>
+        }
+    </section>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Hello to PETS Controller Index action!</h1>
-</div>
+
+

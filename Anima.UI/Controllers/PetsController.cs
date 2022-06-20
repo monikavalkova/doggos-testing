@@ -16,7 +16,7 @@ namespace Anima.UI.Controllers
         {
             //TODO catch unexpected exceptions + add test
             var petsForAdoption = await _client.GetPetsForAdoption();
-            return View();
+            return View(petsForAdoption);
         }
     }
 }
