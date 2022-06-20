@@ -4,7 +4,6 @@ using Anima.WebAPI.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Anima.WebAPI.Data;
 
 namespace Anima.WebAPI.Data
 {
