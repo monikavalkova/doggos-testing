@@ -60,11 +60,11 @@ namespace Anima.WebAPI.Controllers
         [HttpPost("limit")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AFAResponse>> Filter([FromBody] Filter filter)
+        public async Task<ActionResult<AnimalsResponse>> Filter([FromBody] Filter filter)
         {
             var animalsForAdoption = await _service.Filter(filter);
             if (animalsForAdoption.Count() == 0) return NotFound();
-            return Ok(animalsForAdoption);
+            return Ok(new AnimalsResponse() { AnimalsForAdoption = animalsForAdoption});
         }
 
         [HttpPut("{id}")]

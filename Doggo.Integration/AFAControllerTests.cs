@@ -78,9 +78,9 @@ namespace Doggo.Integration
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var contentAsString = await StringifyContent(response);
-            var result =  Deserialize<IEnumerable<AFAResponse>>(contentAsString);
+            var result =  Deserialize<AnimalsResponse>(contentAsString);
 
-            result.Count().Should().Be(5);
+            result.AnimalsForAdoption.Count().Should().Be(6);
         }
 
         [Fact]
@@ -92,9 +92,9 @@ namespace Doggo.Integration
             var httpResponse = await _client.PostAsync(FILTER_URL, requestBodyJson);
             //assert
             var contentAsString = await httpResponse.Content.ReadAsStringAsync();
-            var contentAsEnumerable = JsonConvert.DeserializeObject<IEnumerable<AFAResponse>>(contentAsString);
+            var contentAsEnumerable = JsonConvert.DeserializeObject<AnimalsResponse>(contentAsString);
 
-            contentAsEnumerable.Count().Should().Be(2);
+            contentAsEnumerable.AnimalsForAdoption.Count().Should().Be(2);
         }
 
         [Fact]
@@ -106,9 +106,9 @@ namespace Doggo.Integration
             var httpResponse = await _client.PostAsync(FILTER_URL, requestBodyJson);
             //assert
             var contentAsString = await httpResponse.Content.ReadAsStringAsync();
-            var contentAsEnumerable = JsonConvert.DeserializeObject<IEnumerable<AFAResponse>>(contentAsString);
+            var contentAsEnumerable = JsonConvert.DeserializeObject<AnimalsResponse>(contentAsString);
 
-            contentAsEnumerable.Count().Should().Be(2);
+            contentAsEnumerable.AnimalsForAdoption.Count().Should().Be(2);
         }
 
         [Fact]
@@ -120,10 +120,10 @@ namespace Doggo.Integration
             var httpResponse = await _client.PostAsync(FILTER_URL, requestBodyJson);
             //assert
             var contentAsString = await httpResponse.Content.ReadAsStringAsync();
-            var contentAsEnumerable = JsonConvert.DeserializeObject<IEnumerable<AFAResponse>>(contentAsString);
+            var contentAsEnumerable = JsonConvert.DeserializeObject<AnimalsResponse>(contentAsString);
 
-            contentAsEnumerable.Count().Should().Be(1);
-            contentAsEnumerable.First().Name.Should().Be("Donald");
+            contentAsEnumerable.AnimalsForAdoption.Count().Should().Be(1);
+            contentAsEnumerable.AnimalsForAdoption.First().Name.Should().Be("Donald");
         }
 
         [Fact]
