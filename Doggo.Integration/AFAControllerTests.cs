@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 using FluentAssertions;
 using System.Net.Http;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 using static System.Net.HttpStatusCode;
 using Newtonsoft.Json;
 using System.Net.Mime;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -17,7 +15,7 @@ using Anima.WebAPI.Models;
 
 namespace Doggo.Integration
 {
-    public class AFAControllerTests : IClassFixture<WebApplicationFactory<Startup>> //TODO refactor
+    public class AFAControllerTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
         private const string BASE_URL = "/api/animals";
@@ -80,7 +78,7 @@ namespace Doggo.Integration
             var contentAsString = await StringifyContent(response);
             var result = Deserialize<AnimalsResponse>(contentAsString);
 
-            result.AnimalsForAdoption.Count().Should().Be(6);
+            result.AnimalsForAdoption.Count().Should().BeGreaterThan(5);
         }
 
         [Fact]
@@ -202,23 +200,20 @@ namespace Doggo.Integration
             jsonResponse.Should().Contain("must not be null.");
         }
 
-        [Theory]
-        [InlineData("name", "age", "story", "contactNum", "city", "country", Gender.MALE, Species.DOG)]
-        public async Task post_with_all_required_fields_must_pass_validations(string name, string age,
-                                            string story, string contactNumber, string city,
-                                            string country, Gender gender, Species species)
+        [Fact]
+        public async Task post_with_all_required_fields_must_pass_validations()
         {
             //arrange
             var requestBody = new AFARequest()
             {
-                Name = name,
-                Age = age,
-                Story = story,
-                ContactNumber = contactNumber,
-                City = city,
-                Country = country,
-                Gender = gender,
-                Species = species
+                Name = "Poko",
+                Age = "3",
+                Story = "story",
+                ContactNumber = "contactNumber",
+                City = "Berlin",
+                Country = "DE",
+                Gender = Gender.MALE,
+                Species = Species.DOG
             };
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act
