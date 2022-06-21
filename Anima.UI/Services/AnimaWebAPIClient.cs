@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Anima.UI.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Anima.UI.Services
 {
@@ -15,18 +16,18 @@ namespace Anima.UI.Services
         public async Task<AnimalsResponse> GetPetsForAdoption()
         {
             var client = getHttpClient();
-            var url = "https://localhost:5001/api/animals";  //TODO move to appsettings.json //Add dependency of the configurations!! https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#jcp
+            var url = _configuration[WEB_API_ADDRESS_IN_CONFIGURATION] + "/animals";
             var animalResp = await client.GetFromJsonAsync<AnimalsResponse>(url);
             return animalResp;
         }
 
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
-        //public DoggoWebAPIClient(IConfiguration configuration) 
-        //    => _configuration = configuration; //TODO add to IOC container
+        public AnimaWebAPIClient(IConfiguration configuration) 
+           => _configuration = configuration;
 
-        //private string GetBaseUrl()
-        // => _configuration[WEB_API_ADDRESS_IN_CONFIGURATION];
+        private string GetBaseUrl()
+        => _configuration[WEB_API_ADDRESS_IN_CONFIGURATION];
 
 
         private HttpClient getHttpClient()
