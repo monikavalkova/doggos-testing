@@ -14,12 +14,17 @@ namespace Anima.WebAPI.Services
         public AFAService(IRescuesRepository repo)
         {
             _repo = repo;
-            _mapper = new MapperConfiguration(cfg => cfg.CreateMap<AFA, AFAResponse>()).CreateMapper();
+            _mapper = new MapperConfiguration(cfg => 
+            {
+                cfg.CreateMap<AFA, AFAResponse>();
+                cfg.CreateMap<AFARequest, AFA>();
+            }
+            ).CreateMapper();
         }
 
         public AFAResponse Add(AFARequest animal)
         {
-            var savedEntity = _repo.Create(MapToEntity(animal)); //TODO use auto-mapper
+            var savedEntity = _repo.Create(_mapper.Map<AFA>(animal));
             return _mapper.Map<AFAResponse>(savedEntity);
         }
 
@@ -57,7 +62,7 @@ namespace Anima.WebAPI.Services
             var dbEntity = _repo.GetOne(id);
             if(dbEntity == null) return null;
 
-            var newEntity = MapToEntity(dto); //TODO use auto-mapper!!
+            var newEntity = _mapper.Map<AFA>(dto);
             newEntity.Id = dbEntity.Id;
             
             _repo.Delete(id);
@@ -80,23 +85,6 @@ namespace Anima.WebAPI.Services
             if(animal.Story != null) dbEntity.Story = animal.Story;
 
             return _mapper.Map<AFAResponse>(_repo.UpdatePartial(dbEntity)); 
-        }
-
-        private AFA MapToEntity(AFARequest dto)
-        {
-            return new AFA()
-            {
-                Name = dto.Name,
-                Age = dto.Age,
-                Story = dto.Story,
-                ContactNumber = dto.ContactNumber,
-                City = dto.City,
-                Country = dto.Country,
-                Gender = dto.Gender,
-                Species = dto.Species,
-                Remarks = dto.Remarks,
-                ImageUrl = dto.ImageUrl
-            };
         }
     }
 }
