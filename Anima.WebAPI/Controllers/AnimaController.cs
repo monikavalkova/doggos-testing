@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Anima.WebAPI.Models;
@@ -57,12 +58,15 @@ namespace Anima.WebAPI.Controllers
             return Ok(new AnimalsResponse() { AnimalsForAdoption = allAnimalsForAdoption });
         }
 
-        [HttpPost("filter")]
+        [HttpGet("filter")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AnimalsResponse>> Filter([FromBody] Filter filter)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AnimalsResponse>> Filter(string species)
         {
-            var animalsForAdoption = await _service.Filter(filter);
+            Species enumSpeciesValue;
+            if(!Enum.TryParse<Species>(species, true, out enumSpeciesValue)) return BadRequest("Invalid species value.");
+            var animalsForAdoption = await _service.Filter(new Filter(){ Species = enumSpeciesValue });
             if (animalsForAdoption.Count() == 0) return NotFound();
             return Ok(new AnimalsResponse() { AnimalsForAdoption = animalsForAdoption});
         }

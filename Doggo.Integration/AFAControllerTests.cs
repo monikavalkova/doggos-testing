@@ -21,12 +21,12 @@ namespace Doggo.Integration
     {
         private readonly HttpClient _client;
         private const string BASE_URL = "/api/animals";
-        private const string FILTER_URL = BASE_URL + "/filter";
+        private const string FILTER_URL = BASE_URL + "/filter?species={0}";
 
         public AFAControllerTests(WebApplicationFactory<Startup> fixture)
-        =>  _client = fixture.CreateClient(); 
-        
-        
+        => _client = fixture.CreateClient();
+
+
         [Fact]
         public async Task test_ping()
         {
@@ -39,7 +39,7 @@ namespace Doggo.Integration
 
             var jsonResponse = await result.Content.ReadAsStringAsync();
             var stringResponse = JsonConvert.DeserializeObject<string>(jsonResponse);
-            
+
             stringResponse.Should().Be("OK, good to go.");
         }
 
@@ -49,7 +49,7 @@ namespace Doggo.Integration
             //act
             var response = await _client.GetAsync(BASE_URL + "/non-existent-id");
             //assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+            response.StatusCode.Should().Be(NotFound);
         }
 
         [Fact]
@@ -57,15 +57,15 @@ namespace Doggo.Integration
         {
             //act
             var response = await _client.GetAsync(BASE_URL + "/cass-id");
-            
+
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-           
+
             var stringifiedResponse = await response.Content.ReadAsStringAsync();
             var resultAfa = JsonConvert.DeserializeObject<AFAResponse>(stringifiedResponse);
-            
+
             resultAfa.Species.Should().Be("CAT");
-            resultAfa.Name.Should().Be("Cassi");            
+            resultAfa.Name.Should().Be("Cassi");
         }
 
         [Fact]
@@ -73,12 +73,12 @@ namespace Doggo.Integration
         {
             //act
             var response = await _client.GetAsync(BASE_URL);
-            
+
             //asert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var contentAsString = await StringifyContent(response);
-            var result =  Deserialize<AnimalsResponse>(contentAsString);
+            var result = Deserialize<AnimalsResponse>(contentAsString);
 
             result.AnimalsForAdoption.Count().Should().Be(6);
         }
@@ -87,9 +87,7 @@ namespace Doggo.Integration
         public async Task filter_should_return_2_cats()
         {
             //act
-            var filter = new Filter(){Species = Species.CAT};
-            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
-            var httpResponse = await _client.PostAsync(FILTER_URL, requestBodyJson);
+            var httpResponse = await _client.GetAsync(string.Format(FILTER_URL, Species.CAT.ToString().ToUpper()));
             //assert
             var contentAsString = await httpResponse.Content.ReadAsStringAsync();
             var contentAsEnumerable = JsonConvert.DeserializeObject<AnimalsResponse>(contentAsString);
@@ -98,12 +96,21 @@ namespace Doggo.Integration
         }
 
         [Fact]
+        public async Task filter_should_return_bad_request_for_invalid_species()
+        {
+            //act
+            var httpResponse = await _client.GetAsync(string.Format(FILTER_URL, "cag"));
+            //assert
+            var responseAsString = await httpResponse.Content.ReadAsStringAsync();
+            httpResponse.StatusCode.Should().Be(BadRequest);
+            responseAsString.Should().Contain("Invalid species value.");
+        }
+
+        [Fact]
         public async Task filter_should_return_2_dogs()
         {
             //act
-            var filter = new Filter(){Species = Species.DOG};
-            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
-            var httpResponse = await _client.PostAsync(FILTER_URL, requestBodyJson);
+            var httpResponse = await _client.GetAsync(string.Format(FILTER_URL, Species.DOG.ToString()));
             //assert
             var contentAsString = await httpResponse.Content.ReadAsStringAsync();
             var contentAsEnumerable = JsonConvert.DeserializeObject<AnimalsResponse>(contentAsString);
@@ -115,9 +122,7 @@ namespace Doggo.Integration
         public async Task filter_should_return_1_duck()
         {
             //act
-            var filter = new Filter(){Species = Species.DUCK};
-            var requestBodyJson = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
-            var httpResponse = await _client.PostAsync(FILTER_URL, requestBodyJson);
+            var httpResponse = await _client.GetAsync(string.Format(FILTER_URL, Species.DUCK.ToString()));
             //assert
             var contentAsString = await httpResponse.Content.ReadAsStringAsync();
             var contentAsEnumerable = JsonConvert.DeserializeObject<AnimalsResponse>(contentAsString);
@@ -132,9 +137,7 @@ namespace Doggo.Integration
             //act
             var deleteResponse = await _client.DeleteAsync(BASE_URL + "/bug-id");
 
-            var filter = new Filter(){Species = Species.BUG};
-            var jsonRequestBody = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, MediaTypeNames.Application.Json);
-            var postResponse = await _client.PostAsync(FILTER_URL, jsonRequestBody);
+            var postResponse = await _client.GetAsync(string.Format(FILTER_URL, Species.BUG.ToString()));
             //assert
             postResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -144,8 +147,16 @@ namespace Doggo.Integration
         public async Task delete_animal_should_delete_indeed()
         {
             //arrange
-            var newBug = new AFARequest(){Name = "Jorko", Age = "1", Story = "rescued from a spider web", 
-                            ContactNumber = "c", City = "c", Country = "c", Species = Species.BUG };
+            var newBug = new AFARequest()
+            {
+                Name = "Jorko",
+                Age = "1",
+                Story = "rescued from a spider web",
+                ContactNumber = "c",
+                City = "c",
+                Country = "c",
+                Species = Species.BUG
+            };
 
             var jsonRequestBody = new StringContent(JsonConvert.SerializeObject(newBug), Encoding.UTF8, MediaTypeNames.Application.Json);
             var postResponse = await _client.PostAsync(BASE_URL, jsonRequestBody);
@@ -154,25 +165,33 @@ namespace Doggo.Integration
             var responseBeforeDeletion = await _client.GetAsync(jorkoUri);
             await _client.DeleteAsync(jorkoUri);
             var responseAfterDeletion = await _client.GetAsync(jorkoUri);
-            
+
             //assert
             responseBeforeDeletion.StatusCode.Should().Be(HttpStatusCode.OK);
             responseAfterDeletion.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
-        
+
         [Theory]
         [InlineData("name", "age", "story", null, "city", "country", Gender.FEMALE, Species.DOG)]
         [InlineData("name", "age", "story", "phone", null, "country", Gender.FEMALE, Species.DOG)]
         [InlineData("name", "age", "story", "phone", "city", null, Gender.FEMALE, Species.DOG)]
         [InlineData("name", "age", "story", "phone", "city", "country", Gender.FEMALE, null)]
-        public async Task post_must_accept_only_valid_request_body(string name, string age, string story, 
-                                            string contactNumber, string city, string country, 
+        public async Task post_must_accept_only_valid_request_body(string name, string age, string story,
+                                            string contactNumber, string city, string country,
                                             Gender gender, Species species)
         {
             //arrange
-            var requestBody = new AFARequest(){Name = name, Age = age, Story = story, 
-                            ContactNumber = contactNumber, City = city, Country = country, 
-                            Gender = gender, Species = species };
+            var requestBody = new AFARequest()
+            {
+                Name = name,
+                Age = age,
+                Story = story,
+                ContactNumber = contactNumber,
+                City = city,
+                Country = country,
+                Gender = gender,
+                Species = species
+            };
 
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act
@@ -185,14 +204,22 @@ namespace Doggo.Integration
 
         [Theory]
         [InlineData("name", "age", "story", "contactNum", "city", "country", Gender.MALE, Species.DOG)]
-        public async Task post_with_all_required_fields_must_pass_validations(string name, string age, 
+        public async Task post_with_all_required_fields_must_pass_validations(string name, string age,
                                             string story, string contactNumber, string city,
                                             string country, Gender gender, Species species)
         {
             //arrange
-            var requestBody = new AFARequest(){Name = name, Age = age, Story = story, 
-                            ContactNumber = contactNumber, City = city, Country = country, 
-                            Gender = gender, Species = species };
+            var requestBody = new AFARequest()
+            {
+                Name = name,
+                Age = age,
+                Story = story,
+                ContactNumber = contactNumber,
+                City = city,
+                Country = country,
+                Gender = gender,
+                Species = species
+            };
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act
             var httpResponse = await _client.PostAsync(BASE_URL, requestBodyJson);
@@ -205,9 +232,18 @@ namespace Doggo.Integration
         public async Task post_returns_uri_in_location_header()
         {
             //arrange
-            var requestBody = new AFARequest(){Name = "Maja", Age = "3", Story = "found on the street", 
-                            ContactNumber = "+359884939914", City = "Sofia", Country = "Bulgaria", 
-                            Gender = Gender.FEMALE, Species = Species.CAT, Remarks = "Excellent temperament. Will make a good pet." };
+            var requestBody = new AFARequest()
+            {
+                Name = "Maja",
+                Age = "3",
+                Story = "found on the street",
+                ContactNumber = "+359884939914",
+                City = "Sofia",
+                Country = "Bulgaria",
+                Gender = Gender.FEMALE,
+                Species = Species.CAT,
+                Remarks = "Excellent temperament. Will make a good pet."
+            };
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act 
             var response = await _client.PostAsync(BASE_URL, requestBodyJson);
@@ -223,9 +259,18 @@ namespace Doggo.Integration
         public async Task put_must_return_404_when_id_does_not_exist()
         {
             //arrange
-            var requestBody = new AFARequest(){Name = "Maja", Age = "3", Story = "found on the street", 
-                            ContactNumber = "+359884939914", City = "Sofia", Country = "Bulgaria", 
-                            Gender = Gender.FEMALE, Species = Species.CAT, Remarks = "Excellent temperament. Will make a good pet." };
+            var requestBody = new AFARequest()
+            {
+                Name = "Maja",
+                Age = "3",
+                Story = "found on the street",
+                ContactNumber = "+359884939914",
+                City = "Sofia",
+                Country = "Bulgaria",
+                Gender = Gender.FEMALE,
+                Species = Species.CAT,
+                Remarks = "Excellent temperament. Will make a good pet."
+            };
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act 
             var response = await _client.PutAsync(BASE_URL + "/" + "non-existent-id", requestBodyJson);
@@ -238,14 +283,22 @@ namespace Doggo.Integration
         [InlineData("name", "age", "story", "phone", null, "country", Gender.FEMALE, Species.DOG)]
         [InlineData("name", "age", "story", "phone", "city", null, Gender.FEMALE, Species.DOG)]
         [InlineData("name", "age", "story", "phone", "city", "country", Gender.FEMALE, null)]
-        public async Task put_must_accept_only_valid_request_body(string name, string age, string story, 
-                                            string contactNumber, string city, string country, 
+        public async Task put_must_accept_only_valid_request_body(string name, string age, string story,
+                                            string contactNumber, string city, string country,
                                             Gender gender, Species species)
         {
             //arrange
-            var requestBody = new AFARequest(){Name = name, Age = age, Story = story, 
-                            ContactNumber = contactNumber, City = city, Country = country, 
-                            Gender = gender, Species = species };
+            var requestBody = new AFARequest()
+            {
+                Name = name,
+                Age = age,
+                Story = story,
+                ContactNumber = contactNumber,
+                City = city,
+                Country = country,
+                Gender = gender,
+                Species = species
+            };
 
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act
@@ -271,20 +324,29 @@ namespace Doggo.Integration
             var gender = Gender.FEMALE;
             var species = Species.CAT;
             var remarks = "Excellent temperament. Will make a good pet.";
-            
-            var requestBody = new AFARequest(){Name = name, Age = age, Story = story, 
-                            ContactNumber = contactNumber, City = city, Country = country, 
-                            Gender = gender, Species = species, Remarks = remarks };
+
+            var requestBody = new AFARequest()
+            {
+                Name = name,
+                Age = age,
+                Story = story,
+                ContactNumber = contactNumber,
+                City = city,
+                Country = country,
+                Gender = gender,
+                Species = species,
+                Remarks = remarks
+            };
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
-            
+
             //act 
             var response = await _client.PutAsync(BASE_URL + "/" + "cass-id", requestBodyJson);
-            
+
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            
+
             var afa = JsonConvert.DeserializeObject<AFAResponse>(await response.Content.ReadAsStringAsync());
-            
+
             afa.Name.Should().Be(name);
             afa.Age.Should().Be(age);
             afa.Story.Should().Be(story);
@@ -300,7 +362,7 @@ namespace Doggo.Integration
         public async Task patch_must_return_404_when_id_does_not_exist()
         {
             //arrange
-            var requestBody = new AFAPatchRequest(){Story = "Roki found a loving home.", City = "Stockholm", Country = "Sweden"};
+            var requestBody = new AFAPatchRequest() { Story = "Roki found a loving home.", City = "Stockholm", Country = "Sweden" };
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act 
             var response = await _client.PatchAsync(BASE_URL + "/" + "non-existent-id", requestBodyJson);
@@ -312,13 +374,13 @@ namespace Doggo.Integration
         public async Task patch_must_partially_update()
         {
             //arrange
-            var requestBody = new AFAPatchRequest(){Story = "Roki found a loving home.", City = "Stockholm", Country = "Sweden"};
+            var requestBody = new AFAPatchRequest() { Story = "Roki found a loving home.", City = "Stockholm", Country = "Sweden" };
             var requestBodyJson = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, MediaTypeNames.Application.Json);
             //act 
             var patchResponse = await _client.PatchAsync(BASE_URL + "/" + "roki-id", requestBodyJson);
             //assert
             patchResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-            
+
             var animal = JsonConvert.DeserializeObject<AFAResponse>(await patchResponse.Content.ReadAsStringAsync());
 
             animal.Name.Should().Be("Roki");
@@ -334,6 +396,6 @@ namespace Doggo.Integration
 
         private async Task<string> StringifyContent(HttpResponseMessage response)
         => await response.Content.ReadAsStringAsync();
-        
+
     }
 }
