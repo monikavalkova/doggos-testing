@@ -21,7 +21,7 @@ namespace Doggo.Integration
     {
         private readonly HttpClient _client;
         private const string BASE_URL = "/api/animals";
-        private const string FILTER_URL = BASE_URL + "/limit";
+        private const string FILTER_URL = BASE_URL + "/filter";
 
         public AFAControllerTests(WebApplicationFactory<Startup> fixture)
         =>  _client = fixture.CreateClient(); 

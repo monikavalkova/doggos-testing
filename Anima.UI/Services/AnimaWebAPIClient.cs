@@ -11,31 +11,25 @@ namespace Anima.UI.Services
 {
     public class AnimaWebAPIClient : IAnimaWebAPIClient
     {
+        private readonly HttpClient _httpClient;
         private static readonly string WEB_API_ADDRESS_IN_CONFIGURATION = "WebApi";
 
         public async Task<AnimalsResponse> GetPetsForAdoption()
         {
-            var client = getHttpClient();
             var url = _configuration[WEB_API_ADDRESS_IN_CONFIGURATION] + "/animals";
-            var animalResp = await client.GetFromJsonAsync<AnimalsResponse>(url);
+            var animalResp = await _httpClient.GetFromJsonAsync<AnimalsResponse>(url);
             return animalResp;
         }
 
         private readonly IConfiguration _configuration;
 
-        public AnimaWebAPIClient(IConfiguration configuration) 
-           => _configuration = configuration;
+        public AnimaWebAPIClient(IConfiguration configuration, HttpClient httpClient) 
+        {
+            _configuration = configuration;
+            _httpClient = httpClient;
+        }
 
         private string GetBaseUrl()
         => _configuration[WEB_API_ADDRESS_IN_CONFIGURATION];
-
-
-        private HttpClient getHttpClient()
-        {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-            return client; //TODO improve - use existing instance instead of creating a new one every time 
-        }
     }
 }

@@ -57,7 +57,7 @@ namespace Anima.WebAPI.Controllers
             return Ok(new AnimalsResponse() { AnimalsForAdoption = allAnimalsForAdoption });
         }
 
-        [HttpPost("limit")]
+        [HttpPost("filter")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AnimalsResponse>> Filter([FromBody] Filter filter)

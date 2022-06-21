@@ -20,7 +20,7 @@ namespace Anima.UI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddScoped<IAnimaWebAPIClient, AnimaWebAPIClient>();
+            services.AddSingleton<IAnimaWebAPIClient, AnimaWebAPIClient>(_ => new AnimaWebAPIClient(Configuration, new System.Net.Http.HttpClient()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
